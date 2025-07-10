@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* TinkerForge AI Dark Mode Design System - Inspired by conjecture.dev */
+:root {
+  /* Primary Color Palette */
+  --tf-blue-50: #eff6ff;
+  --tf-blue-100: #dbeafe;
+  --tf-blue-200: #bfdbfe;
+  --tf-blue-300: #93c5fd;
+  --tf-blue-400: #60a5fa;
+  --tf-blue-500: #3b82f6;
+  --tf-blue-600: #2563eb;
+  --tf-blue-700: #1d4ed8;
+  --tf-blue-800: #1e40af;
+  --tf-blue-900: #1e3a8a;
+  
+  /* Neutral Palette - Deep Dark Theme */
+  --tf-neutral-50: #fafafa;
+  --tf-neutral-100: #f4f4f5;
+  --tf-neutral-200: #e4e4e7;
+  --tf-neutral-300: #d4d4d8;
+  --tf-neutral-400: #a1a1aa;
+  --tf-neutral-500: #71717a;
+  --tf-neutral-600: #52525b;
+  --tf-neutral-700: #3f3f46;
+  --tf-neutral-800: #27272a;
+  --tf-neutral-850: #1f1f23;
+  --tf-neutral-900: #18181b;
+  --tf-neutral-925: #141417;
+  --tf-neutral-950: #0a0a0b;
+  
+  /* Accent Colors */
+  --tf-cyan-400: #22d3ee;
+  --tf-cyan-500: #06b6d4;
+  --tf-emerald-400: #34d399;
+  --tf-emerald-500: #10b981;
+  --tf-amber-400: #fbbf24;
+  --tf-amber-500: #f59e0b;
+  --tf-red-400: #f87171;
+  --tf-red-500: #ef4444;
+  
+  /* Typography */
+  --tf-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --tf-font-mono: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+  
+  /* Shadows */
+  --tf-shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --tf-shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.12);
+  --tf-shadow-large: 0 8px 32px rgba(0, 0, 0, 0.16);
+  --tf-shadow-glow: 0 0 32px rgba(59, 130, 246, 0.15);
+  
+  /* Dark theme shadows */
+  --tf-shadow-dark-soft: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --tf-shadow-dark-medium: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --tf-shadow-dark-large: 0 8px 32px rgba(0, 0, 0, 0.6);
+  --tf-shadow-dark-glow: 0 0 32px rgba(59, 130, 246, 0.3);
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--tf-font-sans);
+  font-weight: 400;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--tf-neutral-950);
+  color: var(--tf-neutral-100);
+}
+
+/* Selection Styles */
+::selection {
+  background-color: var(--tf-blue-600);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--tf-blue-600);
+  color: white;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--tf-neutral-925);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--tf-neutral-700);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--tf-neutral-600);
+}
