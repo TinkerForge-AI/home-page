@@ -3,9 +3,14 @@ export default defineNuxtConfig({
   
   modules: [
     '@nuxt/content',
-    '@nuxtjs/color-mode'
+    '@nuxtjs/color-mode',
+    '@nuxtjs/sitemap'
   ],
-  
+
+  site: {
+    url: 'https://tinkerforge.ai'
+  },
+
   content: {
     highlight: {
       theme: {
