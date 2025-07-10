@@ -2,7 +2,7 @@
 title: "The Alignment Tax: A Philosophical Perspective"
 description: "Exploring the trade-offs between AI capability and safety alignment"
 date: 2025-01-13
-type: "philosophy"
+type: "blog"
 author: "Prof. Marcus Wright"
 ---
 

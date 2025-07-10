@@ -4,20 +4,23 @@
       <div class="container">
         <!-- Page Header -->
         <div class="mb-12">
-          <div class="flex items-center gap-4 mb-6">
+          <div class="d-flex justify-content-start align-items-center gap-4 mb-6">
             <div class="relative">
               <img 
                 src="/tinkerforge-avatar.png" 
                 alt="TinkerForge AI Robot" 
-                class="w-12 h-12 rounded-full ring-2 ring-blue-500/30 glow-blue"
+                class="rounded-full ring-2 ring-blue-500/30 glow-blue"
+                style="height: 80%; width: 80%; margin-top: 30px;"
               />
               <div class="absolute inset-0 rounded-full bg-blue-500/20 animate-pulse"></div>
             </div>
             <div>
-              <h1 class="heading-secondary mb-2">
+              <h1 class="heading-secondary mb-1" style="margin-top: 10px;">
                 Blog
               </h1>
-              <p class="text-neutral-400 text-lg">Latest insights on AI safety, research, and development</p>
+              <p class="text-neutral-400 text-lg" style="margin-top: 5px;">
+                Latest insights on AI safety, research, and development
+              </p>
             </div>
           </div>
           <!-- Stats -->
@@ -145,13 +148,25 @@ const { data: allContent, pending, error } = await useAsyncData('all-blog-conten
 
 // Computed filtered posts
 const filteredPosts = computed(() => {
-  if (!allContent.value || !Array.isArray(allContent.value)) return []
-  if (!type.value || type.value === 'All') return allContent.value
+  if (!allContent.value || !Array.isArray(allContent.value)) {
+    console.log('No content available or invalid format:', allContent.value)
+    return []
+  }
+  if (!type.value || type.value === 'All') {
+    console.log('Showing all content:', allContent.value)
+    return allContent.value
+  }
 
-  // Filter by category field
-  return allContent.value.filter((post: any) => {
-    return post.category?.toLowerCase() === type.value.toLowerCase()
+  // Handle multiple type values
+  const validTypes = ['blog', 'philosophy', 'research']
+  const filtered = allContent.value.filter((post: any) => {
+    const postCategory = post.category?.toLowerCase() || ''
+    const selectedType = type.value.toLowerCase()
+    return validTypes.includes(postCategory) && postCategory === selectedType
   })
+
+  console.log(`Filtered posts for category "${type.value}":`, filtered)
+  return filtered
 })
 
 // SEO using useSeoMeta (Nuxt 3 built-in)
