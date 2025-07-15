@@ -32,12 +32,12 @@
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             <div 
               v-for="research in featuredResearch.slice(0, 2)" 
-              :key="research._path"
+              :key="research.path"
               class="card-featured p-8"
             >
               <div class="badge badge-primary mb-4">Featured</div>
               <h3 class="text-2xl font-bold text-white mb-4">{{ research.title }}</h3>
-              <p class="text-neutral-300 mb-6 leading-relaxed">{{ research.description || research.summary }}</p>
+              <p class="text-neutral-300 mb-6 leading-relaxed">{{ research.description }}</p>
               <div class="flex items-center justify-between">
                 <div class="text-sm text-neutral-500">
                   <div class="flex items-center gap-2 mb-1">
@@ -54,7 +54,7 @@
                   </div>
                 </div>
                 <NuxtLink 
-                  :to="`/research${research._path}`" 
+                  :to="`/research${research.path}`" 
                   class="btn-primary text-sm px-4 py-2"
                 >
                   Read Research
@@ -119,7 +119,7 @@
               v-for="post in posts"
               :key="post.path"
               :title="post.title"
-              :summary="post.description || post.summary"
+              :summary="post.description"
               :to="`/blog${post.path}`"
               :date="post.date"
               :type="'research'"
@@ -136,6 +136,17 @@
 <script setup lang="ts">
 import MainLayout from '~/components/MainLayout.vue'
 import BlogCard from '~/components/BlogCard.vue'
+
+// Define the ResearchCollectionItem type with 'author' property
+type ResearchCollectionItem = {
+  path: string
+  _path: string
+  title: string
+  description?: string
+  summary?: string
+  date: string | Date
+  author?: string
+}
 
 // SEO using useSeoMeta (Nuxt 3 built-in)
 useSeoMeta({

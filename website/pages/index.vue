@@ -141,16 +141,15 @@
           </NuxtLink>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" v-if="featuredResearch.length > 0">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" v-if="(featuredResearch ?? []).length > 0">
           <ResearchCard 
-            v-for="research in featuredResearch.slice(0, 3)" 
-            :key="research._path"
+            v-for="research in (featuredResearch ?? []).slice(0, 3)" 
+            :key="research.path"
             :title="research.title"
-            :summary="research.description || research.summary"
-            :to="`/research/${research.slug || research._path}`"
+            :summary="research.description"
+            :to="`/research/${research.path}`"
             :date="research.date"
-            :author="research.author"
-            :category="research.category || 'Research'"
+            :category="'Research'"
           />
         </div>
         
@@ -188,13 +187,13 @@
           </NuxtLink>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" v-if="featuredBlog.length > 0">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" v-if="(featuredBlog ?? []).length > 0">
           <BlogCard 
-            v-for="post in featuredBlog.slice(0, 3)" 
+            v-for="post in (featuredBlog ?? []).slice(0, 3)" 
             :key="post.path"
             :title="post.title"
-            :summary="post.description || post.summary"
-            :to="`/blog/${post.slug || post.path}`"
+            :summary="post.description"
+            :to="getBlogPostUrl(post)"
             :date="post.date"
             :author="post.author"
             :type="post.category || 'Blog'"
@@ -252,6 +251,28 @@ import MainLayout from '~/components/MainLayout.vue'
 import RobotMascot from '~/components/RobotMascot.vue'
 import ResearchCard from '~/components/ResearchCard.vue'
 import BlogCard from '~/components/BlogCard.vue'
+
+// Function to get the correct URL for a blog post
+function getBlogPostUrl(post: any) {
+  // Primary: Use the _path property if it exists and starts with /blog
+  if (post._path && post._path.startsWith('/blog')) {
+    return post._path
+  }
+  
+  // Secondary: Use slug property if available
+  if (post.slug) {
+    return `/blog/${post.slug}`
+  }
+  
+  // Fallback: Extract filename from _path
+  if (post._path) {
+    const filename = post._path.split('/').pop()
+    return `/blog/${filename}`
+  }
+  
+  // Last resort: Use the post ID
+  return `/blog/${post._id || 'unknown'}`
+}
 
 // Fetch featured content
 const { data: featuredResearch } = await useAsyncData('featured-research', () =>

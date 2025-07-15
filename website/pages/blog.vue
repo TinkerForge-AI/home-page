@@ -101,7 +101,7 @@
               :key="post.path"
               :title="post.title"
               :summary="post.description || post.summary"
-              :to="post.path"
+              :to="getBlogPostUrl(post)"
               :date="post.date"
               :type="post.category || 'blog'"
               :author="post.author"
@@ -145,6 +145,28 @@ const { data: allContent, pending, error } = await useAsyncData('all-blog-conten
     .order('date', 'DESC')
     .all()
 ) 
+
+// Function to get the correct URL for a blog post
+function getBlogPostUrl(post: any) {
+  // Primary: Use the _path property if it exists and starts with /blog
+  if (post._path && post._path.startsWith('/blog')) {
+    return post._path
+  }
+  
+  // Secondary: Use slug property if available
+  if (post.slug) {
+    return `/blog/${post.slug}`
+  }
+  
+  // Fallback: Extract filename from _path
+  if (post._path) {
+    const filename = post._path.split('/').pop()
+    return `/blog/${filename}`
+  }
+  
+  // Last resort: Use the post ID
+  return `/blog/${post._id || 'unknown'}`
+}
 
 // Computed filtered posts
 const filteredPosts = computed(() => {
