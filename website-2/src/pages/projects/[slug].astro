@@ -1,6 +1,12 @@
 ---
 import Layout from '../../components/Layout.astro';
-import { getEntryBySlug } from 'astro:content';
+import { getEntryBySlug, getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map(project => ({ params: { slug: project.slug } }));
+}
+
 const { slug } = Astro.params;
 const project = await getEntryBySlug('projects', slug);
 if (!project) throw Astro.redirect('/projects');
@@ -8,7 +14,7 @@ if (!project) throw Astro.redirect('/projects');
 <Layout title={project.data.title} description={project.data.description}>
   <article class="prose prose-invert mx-auto">
     <h1>{project.data.title}</h1>
-    <Markdown content={project.body} />
+    <div set:html={project.body} />
     {project.data.codeUrl && (
       <a href={project.data.codeUrl} class="btn btn-primary mt-4" target="_blank" rel="noopener">View Code</a>
     )}

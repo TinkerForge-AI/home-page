@@ -1,6 +1,13 @@
 ---
 import Layout from '../../components/Layout.astro';
-import { getEntryBySlug } from 'astro:content';
+import { Markdown } from 'astro/components';
+import { getEntryBySlug, getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({ params: { slug: post.slug } }));
+}
+
 const { slug } = Astro.params;
 const post = await getEntryBySlug('blog', slug);
 if (!post) throw Astro.redirect('/blog');
@@ -10,6 +17,6 @@ if (!post) throw Astro.redirect('/blog');
     <h1>{post.data.title}</h1>
     <p class="text-zinc-400">{post.data.description}</p>
     <time class="text-sm text-zinc-500">{post.data.date}</time>
-    <Markdown content={post.body} />
+    <div set:html={post.body} />
   </article>
 </Layout>
