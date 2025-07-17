@@ -1,0 +1,336 @@
+---
+import Layout from '../components/Layout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { errorTracker } from '../utils/errorHandling';
+
+// Test various error scenarios
+const testCases = [
+  {
+    name: 'Valid Post',
+    props: {
+      title: 'Test Post',
+      description: 'This is a test post',
+      publishedAt: new Date('2024-01-01'),
+      slug: 'test-post',
+      tags: ['test', 'example'],
+      readingTime: '5 min read'
+    }
+  },
+  {
+    name: 'Missing Date',
+    props: {
+      title: 'Post with Missing Date',
+      description: 'This post has no publishedAt',
+      publishedAt: undefined,
+      slug: 'missing-date',
+      tags: ['test']
+    }
+  },
+  {
+    name: 'Invalid Date',
+    props: {
+      title: 'Post with Invalid Date',
+      description: 'This post has an invalid date',
+      publishedAt: 'invalid-date-string',
+      slug: 'invalid-date',
+      tags: ['test']
+    }
+  },
+  {
+    name: 'String Date',
+    props: {
+      title: 'Post with String Date',
+      description: 'This post has a string date',
+      publishedAt: '2024-01-15T10:30:00Z',
+      slug: 'string-date',
+      tags: ['test']
+    }
+  },
+  {
+    name: 'No Tags',
+    props: {
+      title: 'Post without Tags',
+      description: 'This post has no tags',
+      publishedAt: new Date('2024-01-01'),
+      slug: 'no-tags',
+      tags: undefined
+    }
+  },
+  {
+    name: 'Many Tags',
+    props: {
+      title: 'Post with Many Tags',
+      description: 'This post has lots of tags',
+      publishedAt: new Date('2024-01-01'),
+      slug: 'many-tags',
+      tags: ['tag1', 'tag2', 'tag3', 'tag4', 'tag5', 'tag6']
+    }
+  }
+];
+---
+
+<Layout 
+  title="Debug & Testing - TinkerForge AI"
+  description="Debug page for testing error handling and components"
+>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-12">
+      <h1 class="text-4xl font-bold text-white mb-4">🔧 Debug & Testing</h1>
+      <p class="text-xl text-gray-400 mb-8">
+        This page tests various error scenarios and component edge cases.
+      </p>
+      
+      <!-- Error Tracking Status -->
+      <div class="bg-surface-light border border-surface-border rounded-xl p-6 mb-8">
+        <h2 class="text-2xl font-bold text-white mb-4">📊 Error Tracking Status</h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-green-400" id="total-errors">0</div>
+            <div class="text-sm text-gray-400">Total Errors</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-yellow-400" id="low-errors">0</div>
+            <div class="text-sm text-gray-400">Low Severity</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-orange-400" id="medium-errors">0</div>
+            <div class="text-sm text-gray-400">Medium Severity</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-red-400" id="critical-errors">0</div>
+            <div class="text-sm text-gray-400">Critical Errors</div>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex gap-4">
+          <button 
+            onclick="updateErrorStats()"
+            class="px-4 py-2 bg-primary-600 hover:bg-primary-500 text-white rounded-lg font-medium transition-colors"
+          >
+            Refresh Stats
+          </button>
+          <button 
+            onclick="clearErrors()"
+            class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-lg font-medium transition-colors"
+          >
+            Clear Errors
+          </button>
+          <button 
+            onclick="showErrorLog()"
+            class="px-4 py-2 bg-surface border border-surface-border text-white rounded-lg font-medium transition-colors hover:bg-surface-light"
+          >
+            Show Error Log
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Cases -->
+    <div class="mb-12">
+      <h2 class="text-3xl font-bold text-white mb-8">🧪 BlogCard Test Cases</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {testCases.map((testCase, index) => (
+          <div class="space-y-4">
+            <div class="bg-surface-dark border border-surface-border rounded-lg p-4">
+              <h3 class="text-lg font-semibold text-white mb-2">{testCase.name}</h3>
+              <pre class="text-xs text-gray-400 overflow-x-auto">
+                {JSON.stringify(testCase.props, null, 2)}
+              </pre>
+            </div>
+            <BlogCard {...testCase.props} />
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Testing Actions -->
+    <div class="bg-surface-light border border-surface-border rounded-xl p-6">
+      <h2 class="text-2xl font-bold text-white mb-4">🎯 Testing Actions</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <button 
+          onclick="runSmokeTests()"
+          class="p-4 bg-green-600 hover:bg-green-500 text-white rounded-lg font-medium transition-colors"
+        >
+          🚀 Run Smoke Tests
+        </button>
+        <button 
+          onclick="testErrorHandling()"
+          class="p-4 bg-blue-600 hover:bg-blue-500 text-white rounded-lg font-medium transition-colors"
+        >
+          💥 Test Error Handling
+        </button>
+        <button 
+          onclick="stressTest()"
+          class="p-4 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-medium transition-colors"
+        >
+          📈 Stress Test
+        </button>
+      </div>
+      
+      <div id="test-results" class="mt-6 hidden">
+        <h3 class="text-lg font-semibold text-white mb-2">📋 Test Results</h3>
+        <div id="test-output" class="bg-surface-dark border border-surface-border rounded-lg p-4 text-sm text-gray-300 font-mono whitespace-pre-wrap max-h-64 overflow-y-auto">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Import our error handling utilities (this will work in browser)
+    let errorTracker = null;
+    
+    // Try to import our utilities
+    try {
+      import('../utils/errorHandling.ts').then(module => {
+        errorTracker = module.errorTracker;
+        updateErrorStats();
+      });
+    } catch (e) {
+      console.log('Could not import error tracker (expected in static build)');
+    }
+
+    function updateErrorStats() {
+      if (!errorTracker) {
+        console.log('Error tracker not available');
+        return;
+      }
+      
+      const errors = errorTracker.getErrors();
+      const lowErrors = errorTracker.getErrorsBySeverity('low');
+      const mediumErrors = errorTracker.getErrorsBySeverity('medium');
+      const criticalErrors = errorTracker.getErrorsBySeverity('critical');
+      
+      document.getElementById('total-errors').textContent = errors.length;
+      document.getElementById('low-errors').textContent = lowErrors.length;
+      document.getElementById('medium-errors').textContent = mediumErrors.length;
+      document.getElementById('critical-errors').textContent = criticalErrors.length;
+    }
+
+    function clearErrors() {
+      if (errorTracker) {
+        errorTracker.clearErrors();
+        updateErrorStats();
+        console.log('✅ Error log cleared');
+      }
+    }
+
+    function showErrorLog() {
+      if (!errorTracker) {
+        alert('Error tracker not available');
+        return;
+      }
+      
+      const errors = errorTracker.getErrors();
+      console.group('📋 Error Log');
+      errors.forEach((error, index) => {
+        console.log(`${index + 1}. [${error.severity}] ${error.message}`);
+      });
+      console.groupEnd();
+      
+      alert(`Error log displayed in console (${errors.length} errors)`);
+    }
+
+    async function runSmokeTests() {
+      showTestResults('Running smoke tests...\n');
+      
+      try {
+        // Simple connectivity test
+        const response = await fetch(window.location.origin);
+        const success = response.ok;
+        
+        appendTestResults(`✅ Homepage connectivity: ${success ? 'PASS' : 'FAIL'}\n`);
+        appendTestResults(`📊 Response status: ${response.status}\n`);
+        appendTestResults(`⏱️  Response time: ${Date.now() - performance.now()}ms\n`);
+        
+        // Test navigation elements
+        const navElements = document.querySelectorAll('nav a');
+        appendTestResults(`🧭 Navigation links found: ${navElements.length}\n`);
+        
+        // Test hero section
+        const heroElement = document.querySelector('h1');
+        appendTestResults(`🎯 Hero section: ${heroElement ? 'FOUND' : 'MISSING'}\n`);
+        
+        appendTestResults('\n🎉 Smoke tests completed!');
+        
+      } catch (error) {
+        appendTestResults(`❌ Smoke test failed: ${error.message}\n`);
+      }
+    }
+
+    function testErrorHandling() {
+      showTestResults('Testing error handling...\n');
+      
+      // Trigger various types of errors
+      try {
+        // Type error simulation
+        const undefinedVar = undefined;
+        undefinedVar.someProperty.toString();
+      } catch (e) {
+        appendTestResults(`✅ Caught TypeError: ${e.message}\n`);
+      }
+      
+      try {
+        // Reference error simulation
+        nonExistentFunction();
+      } catch (e) {
+        appendTestResults(`✅ Caught ReferenceError: ${e.message}\n`);
+      }
+      
+      // Test our custom error handling
+      if (errorTracker) {
+        errorTracker.logError('Test error message', { 
+          component: 'DebugPage', 
+          function: 'testErrorHandling' 
+        }, 'low');
+        appendTestResults(`✅ Custom error logged successfully\n`);
+      }
+      
+      appendTestResults('\n🔧 Error handling tests completed!');
+      updateErrorStats();
+    }
+
+    function stressTest() {
+      showTestResults('Running stress test...\n');
+      
+      const startTime = performance.now();
+      let operations = 0;
+      
+      // Simulate DOM operations
+      for (let i = 0; i < 1000; i++) {
+        const div = document.createElement('div');
+        div.textContent = `Test element ${i}`;
+        document.body.appendChild(div);
+        document.body.removeChild(div);
+        operations++;
+      }
+      
+      const endTime = performance.now();
+      const duration = endTime - startTime;
+      
+      appendTestResults(`⚡ Completed ${operations} DOM operations\n`);
+      appendTestResults(`⏱️  Total time: ${duration.toFixed(2)}ms\n`);
+      appendTestResults(`📊 Operations per second: ${(operations / (duration / 1000)).toFixed(0)}\n`);
+      
+      appendTestResults('\n🚀 Stress test completed!');
+    }
+
+    function showTestResults(content) {
+      const resultsDiv = document.getElementById('test-results');
+      const outputDiv = document.getElementById('test-output');
+      
+      resultsDiv.classList.remove('hidden');
+      outputDiv.textContent = content;
+    }
+
+    function appendTestResults(content) {
+      const outputDiv = document.getElementById('test-output');
+      outputDiv.textContent += content;
+      outputDiv.scrollTop = outputDiv.scrollHeight;
+    }
+
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(updateErrorStats, 1000);
+    });
+  </script>
+</Layout>

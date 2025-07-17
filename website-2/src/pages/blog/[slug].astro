@@ -1,0 +1,15 @@
+---
+import Layout from '../../components/Layout.astro';
+import { getEntryBySlug } from 'astro:content';
+const { slug } = Astro.params;
+const post = await getEntryBySlug('blog', slug);
+if (!post) throw Astro.redirect('/blog');
+---
+<Layout title={post.data.title} description={post.data.description}>
+  <article class="prose prose-invert mx-auto">
+    <h1>{post.data.title}</h1>
+    <p class="text-zinc-400">{post.data.description}</p>
+    <time class="text-sm text-zinc-500">{post.data.date}</time>
+    <Markdown content={post.body} />
+  </article>
+</Layout>

@@ -1,0 +1,13 @@
+---
+const { project } = Astro.props;
+---
+<article class="p-6 rounded-lg bg-zinc-900 shadow hover:shadow-lg transition">
+  <a href={`/projects/${project.slug}/`} class="block group">
+    <h2 class="text-xl font-semibold group-hover:text-blue-400">{project.data.title}</h2>
+    <p class="text-zinc-400 mt-2">{project.data.description}</p>
+    <div class="mt-4 text-sm text-zinc-500">
+      <span>{project.data.date}</span>
+      {project.data.author && <> · {project.data.author}</>}
+    </div>
+  </a>
+</article>

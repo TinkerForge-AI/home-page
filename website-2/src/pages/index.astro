@@ -1,0 +1,314 @@
+---
+import Layout from '../components/Layout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+
+
+// Normalize blog post data and filter for valid posts
+const rawBlogPosts = await getCollection('blog');
+
+const blogPosts = rawBlogPosts
+  .map(post => {
+    // Prefer 'date' but fallback to 'publishedAt' if present
+    let date = post.data.date || post.data.publishedAt;
+    if (date && !(date instanceof Date)) {
+      date = new Date(date);
+    }
+    return {
+      title: post.data.title,
+      description: post.data.description,
+      slug: post.slug,
+      date,
+      tags: post.data.tags || [],
+      readingTime: post.data.readingTime,
+      featured: false, // will set true for first post later
+    };
+  })
+  .filter(post => {
+    // Validate required fields
+    return (
+      post.title &&
+      post.description &&
+      post.slug &&
+      post.date instanceof Date &&
+      !isNaN(post.date.getTime())
+    );
+  });
+
+// Sort by date descending and mark the first as featured
+const featuredPosts = blogPosts
+  .sort((a, b) => b.date.getTime() - a.date.getTime())
+  .map((post, idx) => ({ ...post, featured: idx === 0 }))
+  .slice(0, 3);
+
+const stats = [
+  { number: '50+', label: 'Research Papers', icon: 'document' },
+  { number: '15K+', label: 'Citations', icon: 'chart' },
+  { number: '100+', label: 'Collaborators', icon: 'users' },
+  { number: '5M+', label: 'Model Downloads', icon: 'download' }
+];
+
+const features = [
+  {
+    title: 'AI Safety Research',
+    description: 'Pioneering research in AI alignment and safety to ensure beneficial artificial intelligence.',
+    icon: 'shield'
+  },
+  {
+    title: 'Open Source Models',
+    description: 'State-of-the-art language models and tools released for the research community.',
+    icon: 'code'
+  },
+  {
+    title: 'Rigorous Evaluation',
+    description: 'Comprehensive benchmarks and evaluation frameworks for responsible AI development.',
+    icon: 'beaker'
+  },
+  {
+    title: 'Global Collaboration',
+    description: 'Working with researchers worldwide to advance the field of AI safety and alignment.',
+    icon: 'globe'
+  }
+];
+---
+
+<Layout 
+  title="TinkerForge AI - Pioneering Safe AI Research"
+  description="Leading research organization focused on AI safety, alignment, and beneficial artificial intelligence. Join us in building the future of safe AI."
+>
+  <main>
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <!-- Animated background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-surface-dark via-surface to-surface-light opacity-90"></div>
+      <div class="absolute inset-0">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600/20 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-accent-600/20 rounded-full blur-3xl animate-float" style="animation-delay: -2s;"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl animate-float" style="animation-delay: -4s;"></div>
+      </div>
+      
+      <!-- Content -->
+      <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="animate-fade-in">
+          <!-- Logo/Brand -->
+          <div class="flex justify-center mb-8">
+            <div class="w-20 h-20 bg-gradient-to-br from-primary-500 to-accent-500 rounded-2xl flex items-center justify-center font-bold text-3xl text-white shadow-2xl animate-glow">
+              TF
+            </div>
+          </div>
+          
+          <!-- Headline -->
+          <h1 class="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
+            Pioneering Safe AI
+            <br />
+            <span class="bg-gradient-to-r from-primary-400 to-accent-400 bg-clip-text text-transparent">
+              Research
+            </span>
+          </h1>
+          
+          <!-- Subtitle -->
+          <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+            We're building the future of aligned artificial intelligence through rigorous research, 
+            open collaboration, and a commitment to beneficial AI for humanity.
+          </p>
+          
+          <!-- CTA Buttons -->
+          <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+            <a 
+              href="/research" 
+              class="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              Explore Research
+            </a>
+            <a 
+              href="/blog" 
+              class="px-8 py-4 bg-surface-light hover:bg-surface border border-surface-border text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 backdrop-blur-sm"
+            >
+              Latest Insights
+            </a>
+          </div>
+          
+          <!-- Scroll Indicator -->
+          <div class="animate-bounce">
+            <svg class="w-6 h-6 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Stats Dashboard -->
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface to-surface-dark"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            Research Impact
+          </h2>
+          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            Our commitment to advancing AI safety through measurable research outcomes
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {stats.map((stat, index) => (
+            <div class="text-center p-6 bg-surface-light border border-surface-border rounded-2xl backdrop-blur-sm animate-slide-up" style={`animation-delay: ${index * 100}ms;`}>
+              <div class="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
+                {stat.icon === 'document' && (
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+                {stat.icon === 'chart' && (
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                  </svg>
+                )}
+                {stat.icon === 'users' && (
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                  </svg>
+                )}
+                {stat.icon === 'download' && (
+                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+              </div>
+              <div class="text-3xl font-bold text-white mb-2">{stat.number}</div>
+              <div class="text-gray-400 font-medium">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="py-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            What We Do
+          </h2>
+          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            Our research focuses on the most critical challenges in AI safety and alignment
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {features.map((feature, index) => (
+            <div class="p-8 bg-surface-light border border-surface-border rounded-2xl backdrop-blur-sm hover:border-primary-500/50 transition-all duration-300 group animate-fade-in" style={`animation-delay: ${index * 150}ms;`}>
+              <div class="w-14 h-14 mb-6 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                {feature.icon === 'shield' && (
+                  <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+                {feature.icon === 'code' && (
+                  <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+                {feature.icon === 'beaker' && (
+                  <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7 2a1 1 0 00-.707 1.707L7 4.414v3.758a1 1 0 01-.293.707l-4 4C.817 14.769 2.156 18 4.828 18h10.343c2.673 0 4.012-3.231 2.122-5.121l-4-4A1 1 0 0113 8.172V4.414l.707-.707A1 1 0 0013 2H7zm2 6.172V4h2v4.172a3 3 0 00.879 2.12l1.027 1.028a4 4 0 00-2.171.102l-.47.156a4 4 0 01-2.53 0l-.563-.187a1.993 1.993 0 00-.114-.035l1.063-1.063A3 3 0 009 8.172z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+                {feature.icon === 'globe' && (
+                  <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"/>
+                  </svg>
+                )}
+              </div>
+              <h3 class="text-xl font-bold text-white mb-3">{feature.title}</h3>
+              <p class="text-gray-300 leading-relaxed">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- Featured Research -->
+    <section class="py-20 relative">
+      <div class="absolute inset-0 bg-gradient-to-r from-surface-dark via-surface to-surface-dark"></div>
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            Latest Research
+          </h2>
+          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
+            Stay up to date with our latest findings and insights in AI safety research
+          </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {featuredPosts.map((post, index) => (
+            <div class="animate-slide-up" style={`animation-delay: ${index * 100}ms;`}>
+              <BlogCard
+                title={post.title}
+                description={post.description}
+                date={post.date}
+                slug={post.slug}
+                tags={post.tags}
+                readingTime={post.readingTime}
+                featured={post.featured}
+              />
+            </div>
+          ))}
+        </div>
+        
+        <div class="text-center mt-12">
+          <a 
+            href="/blog" 
+            class="inline-flex items-center px-6 py-3 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
+          >
+            View All Research
+            <svg class="w-5 h-5 ml-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Call to Action -->
+    <section class="py-20 relative">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="p-12 bg-gradient-to-br from-surface via-surface-light to-surface border border-surface-border rounded-3xl backdrop-blur-sm relative overflow-hidden">
+          <!-- Background patterns -->
+          <div class="absolute inset-0 bg-gradient-to-br from-primary-600/10 via-transparent to-accent-600/10"></div>
+          <div class="absolute top-0 left-0 w-full h-full opacity-30">
+            <div class="absolute top-1/4 left-1/4 w-32 h-32 bg-primary-500/20 rounded-full blur-2xl"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-24 h-24 bg-accent-500/20 rounded-full blur-2xl"></div>
+          </div>
+          
+          <div class="relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">
+              Join the Future of AI Research
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              Collaborate with us to build safe, aligned AI systems that benefit humanity. 
+              Together, we can shape the future of artificial intelligence.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a 
+                href="/contact" 
+                class="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
+              >
+                Get Involved
+              </a>
+              <a 
+                href="/newsletter" 
+                class="px-8 py-4 bg-surface-light hover:bg-surface border border-surface-border text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 backdrop-blur-sm"
+              >
+                Subscribe to Updates
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>
