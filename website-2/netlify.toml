@@ -1,6 +1,6 @@
 [build]
   base    = "website-2"
-  publish = "website-2/dist"
+  publish = "dist"
   command = "npm install && npm run build"
 
 [build.environment]
