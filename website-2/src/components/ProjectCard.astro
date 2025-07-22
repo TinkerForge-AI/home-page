@@ -7,7 +7,7 @@ const { project } = Astro.props;
       <span class="inline-block mb-2 px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/80 text-blue-100 uppercase tracking-wide">{project.data.status}</span>
     )}
     <img src="/favicon.svg" alt="Project image" class="w-16 h-16 mx-auto mb-3 rounded-lg object-contain bg-zinc-800" />
-    <a href={`/projects/${project.slug}/`} class="block">
+    <a href={project.data.github} class="block" target="_blank" rel="noopener">
       <h2 class="text-2xl font-bold mb-2 group-hover:text-blue-400 transition-colors">{project.data.title}</h2>
       <p class="text-zinc-400 mb-4">{project.data.description}</p>
     </a>
