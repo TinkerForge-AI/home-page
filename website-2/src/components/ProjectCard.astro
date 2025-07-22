@@ -1,13 +1,37 @@
 ---
 const { project } = Astro.props;
 ---
-<article class="p-6 rounded-lg bg-zinc-900 shadow hover:shadow-lg transition">
-  <a href={`/projects/${project.slug}/`} class="block group">
-    <h2 class="text-xl font-semibold group-hover:text-blue-400">{project.data.title}</h2>
-    <p class="text-zinc-400 mt-2">{project.data.description}</p>
-    <div class="mt-4 text-sm text-zinc-500">
-      <span>{project.data.date}</span>
-      {project.data.author && <> · {project.data.author}</>}
+<article class="flex flex-col justify-between p-6 rounded-2xl bg-zinc-900 shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.03] transition-all border border-zinc-800 group">
+  <div>
+    {project.data.status && (
+      <span class="inline-block mb-2 px-3 py-1 text-xs font-semibold rounded-full bg-blue-800/80 text-blue-100 uppercase tracking-wide">{project.data.status}</span>
+    )}
+    <img src="/favicon.svg" alt="Project image" class="w-16 h-16 mx-auto mb-3 rounded-lg object-contain bg-zinc-800" />
+    <a href={`/projects/${project.slug}/`} class="block">
+      <h2 class="text-2xl font-bold mb-2 group-hover:text-blue-400 transition-colors">{project.data.title}</h2>
+      <p class="text-zinc-400 mb-4">{project.data.description}</p>
+    </a>
+    {project.data.tags && project.data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-2">
+        {project.data.tags.map(tag => (
+          <span class="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+  <div class="flex items-end justify-between mt-4">
+    <div>
+      {project.data.github && (
+        <a href={project.data.github} class="inline-block mr-2 text-zinc-400 hover:text-white" target="_blank" rel="noopener" title="GitHub Repository">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6"><path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .267.18.578.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2Z" /></svg>
+        </a>
+      )}
+      {project.data.demo && (
+        <a href={project.data.demo} class="inline-block text-zinc-400 hover:text-white" target="_blank" rel="noopener" title="Live Demo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.237-.312.349-.468.349-.678a.75.75 0 0 0-.75-.75c-.21 0-.366.112-.678.349a2.25 2.25 0 0 1-.959.401c-.355 0-.676-.186-.959-.401-.312-.237-.468-.349-.678-.349a.75.75 0 0 0-.75.75c0 .21.112.366.349.678.237.312.401.604.401.959 0 .355-.186.676-.401.959-.237.312-.349.468-.349.678a.75.75 0 0 0 .75.75c.21 0 .366-.112.678-.349.283-.215.604-.401.959-.401.355 0 .676.186.959.401.312.237.468.349.678.349a.75.75 0 0 0 .75-.75c0-.21-.112-.366-.349-.678a2.25 2.25 0 0 1-.401-.959Z" /><path stroke-linecap="round" stroke-linejoin="round" d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+        </a>
+      )}
     </div>
-  </a>
+    <span></span>
+  </div>
 </article>

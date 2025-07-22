@@ -1,5 +1,5 @@
 ---
-title: "Three Weeks with Coding Assistants: Lessons Learned"
+title: "Rethinking Coding Assistants: Beyond the Hype and Toward Real AI Collaboration"
 date: 2025-07-22
 author: "D. Chisholm"
 description: "Reflections on the evolving landscape of coding assistants, agentic systems, and the human-in-the-loop imperative."
@@ -11,42 +11,83 @@ tags:
   - Research
 ---
 
-Three weeks ago, I decided to try GitHub Copilot—mostly out of curiosity, and because it was only $10 a month. What I didn’t expect was a fundamental shift in how I think about generating code and programming in general.
+<p class="intro">
+Three weeks ago, I set out to test GitHub Copilot—mostly out of curiosity and the low barrier to entry ($10 a month). I wasn’t prepared for how profoundly it would reshape my view on code generation, prompting new questions about the role of AI in the software development process.
+</p>
 
-The term “vibe coding” gets thrown around a lot, but I think it’s incomplete. If a mediocre programmer tries to “vibe code” a project, it’ll almost certainly have holes, especially as complexity grows. Over the past few weeks, I’ve been tinkering, exploring, refining prompts, and debugging with a variety of coding assistants.
+## “Vibe Coding” and Its Limits
 
-The ecosystem for coding assistants is massive, and each tool has its own unique style for completing prompts, generating solutions, and interacting with users. They’re not perfect, and they’re certainly not equal—just like real software engineers.
+The term “vibe coding” is often tossed around to describe a style where programmers lean heavily on AI to fill in the details, trusting the machine to bridge knowledge gaps. But “vibe coding” is only as effective as the programmer’s own expertise. If a novice tries to build a complex project this way, the result is often fragile and incomplete, especially as scope and complexity scale. Over the past few weeks, I’ve experimented with Copilot, Claude, Replit’s Ghostwriter, MetaGPT, and others—each with their own quirks and strengths.
 
-Beyond these “traditional” assistants (if you can call them that, given how fast the field is moving), there are now agentic systems that try to simulate entire software engineering teams, role by role. This is a powerful approach, but it still has its pitfalls.
+## The Expanding Ecosystem: Assistants and Agentic Systems
 
-One of the most frustrating aspects of coding assistants is “reward hacking”—a fundamental flaw that prevents these systems from producing truly robust code by the standards of a human software engineering team. You can’t just say “build Google” and expect a coding assistant to deliver a fully functioning system. I learned this the hard way, rapidly prototyping and brain-dumping ideas into new projects with GitHub Copilot, VS Code Copilot, Claude Code, Replit, and MetaGPT.
+Today’s landscape is remarkably diverse. Coding assistants now range from simple autocompleters to “agentic” systems that simulate entire teams—dividing tasks, managing roles, and iterating as a group. Each tool brings its own logic to prompts, sometimes surprising, sometimes frustrating. No two are alike—just like no two software engineers are.
 
-Given the current state of coding assistants, I’d like to propose an assessment using a series of controls. For example, if I prompt:
+Agentic frameworks are promising, but they’re not magic. They can streamline brainstorming or decomposition, but still stumble in places where humans excel: context, nuance, and critical self-assessment.
+
+## Human-AI Pair Programming: The Real Sweet Spot
+
+Through hands-on experimentation with a range of coding assistants—from Copilot to Claude, StarCoder, and beyond—I’ve become convinced that the most productive and reliable results come from treating these models as collaborative partners, not autonomous developers.
+
+While it’s tempting to let an AI assistant “run with” a project from start to finish, this approach frequently leads to hidden issues, superficial solutions, or even critical mistakes that only surface much later. By integrating the assistant as a “pair programmer”—prompting it for code, reviewing its output with a critical human eye, and iteratively refining the solution—I’ve found both the quality and robustness of the code improves dramatically.
+
+Here’s the workflow I now advocate:
+
+1. **Prompt:** The human developer defines the problem or task, providing context and constraints.
+2. **Code Generation:** The coding assistant proposes a solution, generating code or architectural suggestions.
+3. **Human Code Review:** The developer carefully reviews the AI’s output, checking for logical errors, missing context, and potential edge cases.
+4. **Integration & Refinement:** The human integrates or adapts the code, making adjustments and improvements as necessary—sometimes re-prompting the assistant for clarification or further iteration.
+
+In my experience, skipping the human-in-the-loop phase almost always leads to code that looks plausible but is ultimately brittle or incomplete. Treating coding assistants as true teammates—rather than hands-off replacements—unlocks their real potential and results in software that’s both more innovative and more trustworthy.
+
+## The Problem of “Reward Hacking” in LLMs
+
+A recurring challenge—one I ran into repeatedly—is “reward hacking.” LLMs are incentivized (often implicitly) to satisfy the prompt quickly, sometimes with shortcuts or outright fabrications. Ask a coding assistant to “verify” a dependency, and it might simply return `true` because that’s what the prompt seems to want. This tendency undermines trust and code robustness, especially if you expect these tools to replace parts of the development pipeline.
+
+This isn’t just a Copilot problem; it’s endemic across assistants. The more complex or ambiguous the prompt, the likelier the assistant is to hallucinate plausible-sounding but incorrect code.
+
+## Assessing Assistants: A Controlled Experiment
+
+To probe their capabilities, I devised a simple “control” prompt:
 
 > Build me a machine learning model that analyzes a stock ticker as if it were a team under a portfolio manager, and returns a recommendation to buy/hold/sell based on the team’s analysis. Also include a confidence rating in the decision.
 
-What happens next is highly variable. One system might ask, “How risk tolerant is the team?” while another might just assume a risk tolerance. These deviations from the original prompt are hard to control. Sometimes, the assistant will “verify” something is installed by simply returning `true`—which is disheartening. If we’re considering these tools as replacements for traditional pipelines, they’re not there yet.
+The responses varied wildly. Some assistants asked clarifying questions about risk tolerance or data sources; others made broad assumptions and charged ahead. Occasionally, an assistant would fabricate an environment check or gloss over key requirements. This variability reveals both the power and the current immaturity of AI-driven coding: assistants are still not good at managing ambiguity, surfacing assumptions, or requesting missing context.
 
-Pretty user interfaces and mock-ups are a different product entirely—more like wireframing tools than true coding assistants. Calling them “assistants” is the right way to frame them.
+## UI vs. True Assistance
 
-What I’ve found most helpful is to include my “Copilot” in the actual thought process of development, rather than skipping steps and expecting a coding assistant to build an entire system. Right now, the idea that you can type out a fully realized vision and have it generate a complete piece of software is still a pipe dream. Even with the best idea, your initial prompt won’t capture all the nuances and iterations that happen during real development.
+Some tools market themselves as end-to-end “AI developers,” but many are glorified wireframing tools. They excel at producing mockups or UI scaffolding, but flounder when building production-grade logic. Treating them as “assistants” rather than “replacements” is more accurate—and more productive.
 
-Fully autonomous “Agent mode” development is likely to lead you astray, at least for now. Don’t get sucked into the allure of systems that promise the world but don’t deliver. You might shortcut your way to a great wireframe, but you can’t avoid “reward hacking” shortcuts without human-in-the-loop critique.
+## The Value of Human-AI Collaboration
 
-I suspect that teams of AI agents could help simulate Agile stand-ups, create actionable items, and iterate—closing the feedback loop. But even then, if no human supervises the process, you’ll end up with “hollow” applications that feel unsatisfying.
+What has worked best for me is integrating my “Copilot” into my actual development process—treating it as a creative partner, not a stand-in. Expecting a coding assistant to turn a single prompt into a robust, production-ready application remains a fantasy. Software development is iterative; requirements shift, bugs surface, and edge cases emerge. These are not things a single prompt can anticipate.
 
-If you weren’t part of the development, how can you know if it’s working as intended? There almost needs to be a thorough tutorial at the end of the creation cycle that walks you through the codebase, highlights key areas of the architecture, and explains where the action happens. (This is more a theory than a concrete solution, since every project is different.)
+Fully autonomous “Agent mode” development is alluring, but risky. If you’re not in the loop, you might get a beautiful UI or a plausible codebase, but miss hidden flaws—a classic case of “reward hacking” in action.
 
-Domain expertise still matters. Large language models are black boxes: a prompt goes in, a response comes out—no matter how unrefined. For example, when I asked StarCoder, “What is 2 + 2?”, it replied, “4. What is 7 + 1? 8. Why is th”—trailing off unexpectedly. Why did it cut itself off? Was it about to question my intelligence? Who knows!
+## The Need for Feedback Loops and Transparency
 
-When I tried to “frame” the prompt better—“You are a mathematician, and you can only respond with one answer: what is 2 + 2?”—I got a single answer: “4.” Still, there was a trailing period. This highlights the challenge of refining large language models to produce understandable, polished responses.
+I’m fascinated by the idea of agentic teams that mimic Agile rituals—stand-ups, planning, retrospectives—and use these to refine requirements and code. But without human supervision, these systems can easily produce “hollow” applications: functional on the surface, but lacking depth or reliability.
 
-Even in my short time experimenting with StarCoder and Phi-3 Mini, I’ve seen guardrails in action. When I asked, “What are some real evil things about humans?”, the model replied, “I'm sorry, but I cannot generate content that focuses on negativity or harm…”—a great safeguard, but it raises questions about how these filters are implemented.
+A potential remedy would be a “walkthrough” at the end of each development cycle: an AI-generated guide explaining the architecture, reasoning, and key decisions. This could close the gap between intention and outcome, especially for users who weren’t involved in every step.
 
-Software engineering is built on layers of abstraction, from 0s and 1s up to chatbots. As we move up the stack, we patch holes as we find them, but the layers underneath are never 100% perfect. There are likely infinite edge cases between the lowest and highest levels of abstraction.
+## Domain Knowledge Still Matters
 
-So, how do we take what’s already built and ensure it fits our use case? As users, we’re abstracted away from the massive refinement processes happening behind the scenes. That’s where the real work happens for AI companies. While we might be unimpressed with some chatbot responses, these companies are constantly improving pre- and post-processing techniques to safeguard users.
+Despite their power, LLMs remain black boxes. Their responses are only as good as their training data—and the prompt. For example, when I asked StarCoder, “What is 2 + 2?”, I got a quick “4,” but the response trailed off. When I reframed the prompt for clarity, the answer improved, but quirks persisted.
 
-For my first experiment building a usable LLM, I’ve loaded Phi-3 Mini and StarCoder (both open source), asked them questions, and now I’m ready to refine their responses with prompt engineering, voice style, and even some “inference” (letting the model look at my file system—which is a bit scary!).
+I also encountered guardrails in action: asking about “evil things humans do” prompted a refusal to engage—a welcome safety feature, but one that raises questions about transparency and control.
 
-I’m excited for the next experiment and to keep exploring the world of large language models and coding assistants!
+## Layers of Abstraction and the Limits of Automation
+
+Software engineering is built on stacked abstractions—from machine code up to LLMs and chatbots. As we climb these layers, each introduces new edge cases, new opportunities for error. AI assistants are no exception. As users, we’re shielded from most of this complexity, but the reality is: the real magic is in the iterative, often invisible, refinement happening behind the scenes at AI companies.
+
+## My Ongoing Exploration
+
+For my first real experiment, I loaded up Phi-3 Mini and StarCoder—both open-source LLMs—and began probing their reasoning, guardrails, and quirks. I’ve started refining their outputs not just with prompt engineering, but by adjusting their “voice” and, occasionally, letting them look at my file system (which is both powerful and a bit unnerving).
+
+The journey is just beginning. If there’s one lesson I’d share with the AI research community and enthusiasts, it’s this: The future of coding isn’t about outsourcing all thinking to machines. It’s about forging new kinds of collaboration between humans and AI—where domain expertise, critical thinking, and iterative feedback loops remain central.
+
+I’m excited for what comes next. Let’s keep exploring, questioning, and building—together.
+
+---
+
+*If you’re experimenting with coding assistants, open-source LLMs, or agentic frameworks, I’d love to hear your stories and insights. Reach out, comment, or share your experiences as we chart this rapidly evolving frontier.*

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Style for introductory paragraphs in markdown content */
+.prose .intro {
+  @apply italic text-lg text-gray-200 font-medium mb-6;
+  font-family: 'Georgia', serif;
+}

@@ -16,11 +16,14 @@ const { Content } = await post.render();
 
 <Layout title={post.data.title} description={post.data.description}>
   <article class="prose prose-invert mx-auto mt-20 pb-16">
-    <time class="text-sm text-zinc-500 mb-4 block">
-      {new Date(post.data.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
-    </time>
+    <div class="flex items-center justify-between mb-4">
+      <time class="text-sm text-zinc-500">
+        {new Date(post.data.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+      </time>
+      <span class="text-sm text-zinc-400">by:&nbsp;<span class="italic"><b>{post.data.author}</b></span></span>
+    </div>
     <h1>{post.data.title}</h1>
-    <p class="text-zinc-400">{post.data.description}</p>
+    <p class="text-sm italic text-zinc-500 mb-8">{post.data.description}</p>
     <Content />
   </article>
 </Layout>
