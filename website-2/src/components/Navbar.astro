@@ -1,5 +1,7 @@
+
 ---
 // Remove the old avatar import since we need to create an assets folder first
+import TinkerForgeLogo from "./TinkerForgeLogo.astro";
 ---
 
 <nav class="fixed top-0 w-full z-50 glass border-b border-surface-border backdrop-blur-xl">
@@ -9,9 +11,7 @@
       <div class="flex items-center">
         <a href="/" class="flex items-center space-x-3 group">
           <div class="relative">
-            <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg flex items-center justify-center font-bold text-white text-sm group-hover:scale-110 transition-transform duration-200">
-              TF
-            </div>
+            <TinkerForgeLogo size={32} class="w-8 h-8 rounded-lg group-hover:scale-110 transition-transform duration-200" />
             <div class="absolute inset-0 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg blur opacity-30 group-hover:opacity-50 transition-opacity duration-200"></div>
           </div>
           <div class="text-xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">

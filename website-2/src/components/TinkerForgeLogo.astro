@@ -1,0 +1,14 @@
+---
+// TinkerForgeLogo.astro: A reusable logo component
+// Props: size (number, optional)
+const size = Astro.props.size;
+const className = Astro.props.class ?? "";
+---
+
+<img
+  src="/images/tinkerforge-logo.jpeg"
+  alt="TinkerForge Logo"
+  {...(size ? { width: size, height: size } : {})}
+  class={`object-cover${!size ? ' w-full h-full' : ''} ${className}`.trim()}
+  draggable="false"
+/>
