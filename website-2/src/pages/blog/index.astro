@@ -35,32 +35,36 @@ const allPosts = (await getCollection('blog'))
   })
   .sort((a, b) => b.date.getTime() - a.date.getTime());
 
-// Mark first 2 posts as featured
-const featuredPosts = allPosts.slice(0, 2).map(post => ({ ...post, featured: true }));
-const otherPosts = allPosts.slice(2);
+// Show all posts, no artificial split
+const posts = allPosts;
 
-const categories = [
-  {
-    name: "AI Safety",
-    description: "Research and insights on making AI systems safe and beneficial",
-    count: allPosts.filter(p => p.tags?.some(tag => tag.toLowerCase().includes('safety'))).length
-  },
-  {
-    name: "Alignment",
-    description: "Work on ensuring AI systems pursue intended goals",
-    count: allPosts.filter(p => p.tags?.some(tag => tag.toLowerCase().includes('alignment'))).length
-  },
-  {
-    name: "Technical",
-    description: "Deep dives into AI technical challenges and solutions",
-    count: allPosts.filter(p => p.type === 'blog' && p.tags?.includes('Technical')).length
-  },
-  {
-    name: "Philosophy",
-    description: "Philosophical perspectives on AI and its impact",
-    count: allPosts.filter(p => p.type === 'philosophy').length
-  }
+// Gather all unique tags from all posts
+const tagSet = new Set();
+allPosts.forEach(post => (post.tags || []).forEach(tag => tagSet.add(tag)));
+const allTags = Array.from(tagSet);
+
+// Assign a color to each tag (cycling through a palette)
+const tagColors = [
+  'bg-blue-600', 'bg-green-600', 'bg-pink-600', 'bg-yellow-500', 'bg-purple-600', 'bg-red-600', 'bg-teal-600', 'bg-orange-500', 'bg-indigo-600', 'bg-rose-600',
 ];
+const getTagColor = (tag, idx) => tagColors[idx % tagColors.length];
+
+// Pre-process tag for display: split on delimiters, capitalize each word, detect acronyms
+function formatTag(tag) {
+  // Split on -, _, ., or camelCase boundaries
+  let words = tag
+    .replace(/([a-z])([A-Z])/g, '$1 $2') // camelCase to space
+    .split(/[-_.\s]+/);
+  words = words.map(w => {
+    // If word is all uppercase or all lowercase and <=5 chars, treat as acronym
+    if ((/^[A-Z]{2,}$/.test(w)) || (/^[a-z]{2,5}$/.test(w) && w === w.toLowerCase())) {
+      return w.toUpperCase();
+    }
+    // Otherwise, capitalize first letter only
+    return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();
+  });
+  return words.join(' ');
+}
 ---
 
 <Layout 
@@ -78,33 +82,18 @@ const categories = [
       
       <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center">
-          <h1 class="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-tight">
+          <h1 class="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent leading-[1.15] pb-2">
             Blog
           </h1>
           <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
             Insights, research updates, and perspectives on AI safety, alignment, 
             and the future of artificial intelligence.
           </p>
-          
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a 
-              href="#featured" 
-              class="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105"
-            >
-              Latest Posts
-            </a>
-            <a 
-              href="#categories" 
-              class="px-8 py-4 bg-surface-light hover:bg-surface border border-surface-border text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 backdrop-blur-sm"
-            >
-              Browse Categories
-            </a>
-          </div>
         </div>
       </div>
     </section>
 
-    <!-- Categories -->
+    <!-- Dynamic Tag Cluster -->
     <section id="categories" class="py-20 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-16">
@@ -115,46 +104,16 @@ const categories = [
             Explore our content by topic and area of focus
           </p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category, index) => (
-            <div class="p-6 bg-surface-light border border-surface-border rounded-2xl backdrop-blur-sm hover:border-primary-500/50 transition-all duration-300 group text-center">
-              <div class="w-12 h-12 mx-auto mb-4 bg-gradient-to-br from-primary-500 to-accent-500 rounded-xl flex items-center justify-center">
-                <span class="text-white font-bold text-lg">{category.count}</span>
-              </div>
-              <h3 class="text-lg font-bold text-white mb-2">{category.name}</h3>
-              <p class="text-gray-300 text-sm leading-relaxed">{category.description}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Posts -->
-    <section id="featured" class="py-20 relative bg-gradient-to-r from-surface-dark via-surface to-surface-dark">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-            Featured Posts
-          </h2>
-          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-            Our most recent and impactful blog posts
-          </p>
-        </div>
-        
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {featuredPosts.map((post, index) => (
-            <div class="animate-slide-up" style={`animation-delay: ${index * 100}ms;`}>
-              <BlogCard
-                title={post.title}
-                description={post.description}
-                date={post.date}
-                slug={post.slug}
-                tags={post.tags}
-                readingTime={post.readingTime}
-                featured={post.featured}
-              />
-            </div>
+        <div class="flex flex-wrap justify-center gap-3">
+          {allTags.map((tag, idx) => (
+            <a
+              href={`#tag-${tag.replace(/\s+/g, '-')}`}
+              class={`px-4 py-2 rounded-full text-white font-semibold shadow-md cursor-pointer hover:scale-105 transition-all ${getTagColor(tag, idx)}`}
+              title={`Show posts tagged '${formatTag(tag)}'`}
+              key={tag}
+            >
+              {formatTag(tag)}
+            </a>
           ))}
         </div>
       </div>
@@ -171,9 +130,8 @@ const categories = [
             Browse our complete collection of articles and insights
           </p>
         </div>
-        
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {otherPosts.map((post, index) => (
+          {posts.map((post, index) => (
             <div class="animate-fade-in" style={`animation-delay: ${index * 50}ms;`}>
               <BlogCard
                 title={post.title}
@@ -187,14 +145,14 @@ const categories = [
             </div>
           ))}
         </div>
-
-        {otherPosts.length === 0 && (
+        {posts.length === 0 && (
           <div class="text-center py-12">
-            <p class="text-gray-400 text-lg">No additional posts available at this time.</p>
+            <p class="text-gray-400 text-lg">No blog posts available at this time.</p>
           </div>
         )}
       </div>
     </section>
+
 
     <!-- Newsletter Signup -->
     <section class="py-20 relative">
