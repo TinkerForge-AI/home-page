@@ -1,17 +1,9 @@
 ---
 const { member } = Astro.props;
 
-let imgSrc = member.img;
-let imgWidth = 96;
-let imgHeight = 96;
-if (typeof member.img === 'string' && member.img.startsWith('/images/')) {
-  try {
-    const imported = await import(`../assets/${member.img.replace('/images/', '')}`);
-    imgSrc = imported.default.src;
-    imgWidth = imported.default.width;
-    imgHeight = imported.default.height;
-  } catch {}
-}
+const imgSrc = member.img;
+const imgWidth = 96;
+const imgHeight = 96;
 ---
 <div class="text-center">
   <img src={imgSrc} width={imgWidth} height={imgHeight} alt={member.name} class="w-24 h-24 rounded-full mx-auto mb-2" loading="lazy" />

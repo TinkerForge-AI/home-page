@@ -1,9 +1,10 @@
 ---
 title: "Experiment 2: Robustness Testing"
 description: "Research on robustness testing for AI models with experimental setup and results"
-date: 2025-01-11
+date: 2025-07-15
 type: "blog"
 author: "TinkerForge AI"
+tags: ["Experiments", "Robustness", "AI Research", "Explainability", "Lightweight"]
 ---
 # Experiment 2 Post-Mortem: Narrated Neurons and the Quest for Explainable, Resource-Efficient AI
 

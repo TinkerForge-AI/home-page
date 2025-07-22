@@ -1,6 +1,7 @@
 ---
 import Layout from '../components/Layout.astro';
 import TeamMember from '../components/TeamMember.astro';
+import SupportCTA from '../components/SupportCTA.astro';
 const team = [
   { name: "Alex Rodriguez", role: "Founder", img: "/images/alex.jpg", github: "alex", twitter: "alexai" },
   // Add more team members here
@@ -14,4 +15,7 @@ const team = [
       <TeamMember member={member} />
     ))}
   </div>
+  
+  <!-- Support CTA -->
+  <SupportCTA variant="inline" />
 </Layout>

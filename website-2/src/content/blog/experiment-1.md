@@ -1,9 +1,10 @@
 ---
 title: "Experiment 1: Open-Source Alignment Benchmark"
 description: "Our first open-source alignment benchmark with methodology and results"
-date: 2025-01-10
+date: 2025-07-13
 type: "blog"
 author: "TinkerForge AI"
+tags: ["Experiments", "Alignment", "Benchmark", "AI Research", "Neural Network"]
 ---
 T# Post-Mortem: The "Green Detection" Neuron Experiment — Lessons from the Lab
 

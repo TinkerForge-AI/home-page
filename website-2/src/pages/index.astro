@@ -2,6 +2,7 @@
 import Layout from '../components/Layout.astro';
 import BlogCard from '../components/BlogCard.astro';
 import TinkerForgeLogo from '../components/TinkerForgeLogo.astro';
+import SupportCTA from '../components/SupportCTA.astro';
 import { getCollection } from 'astro:content';
 
 
@@ -198,7 +199,7 @@ const features = [
           })}
         </div>
         <div class="text-center mt-10">
-          <a href="/support-us" class="inline-block px-8 py-4 bg-accent-600 hover:bg-accent-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
+          <a href="/support" class="inline-block px-8 py-4 bg-accent-600 hover:bg-accent-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl">
             Help us grow! Donate or contribute
           </a>
         </div>
@@ -330,5 +331,8 @@ const features = [
         </div>
       </div>
     </section>
+
+    <!-- Support CTA -->
+    <SupportCTA />
   </main>
 </Layout>

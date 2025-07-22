@@ -1,6 +1,9 @@
 ---
 import Layout from '../../components/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
+import BlogTagFilter from '../../components/BlogTagFilter.jsx';
+import SupportCTA from '../../components/SupportCTA.astro';
+import { jsx } from 'astro/jsx-runtime';
 import { getCollection } from 'astro:content';
 
 // Get all blog posts and normalize data
@@ -9,7 +12,8 @@ const allPosts = (await getCollection('blog'))
     // Prefer 'date' but fallback to 'publishedAt' if present
     let date = post.data.date || post.data.publishedAt;
     if (date && !(date instanceof Date)) {
-      date = new Date(date);
+      // Fix: force local time parsing to avoid off-by-one errors
+      date = new Date(date + 'T00:00:00');
     }
     return {
       title: post.data.title,
@@ -73,7 +77,7 @@ function formatTag(tag) {
 >
   <main class="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark">
     <!-- Hero Section -->
-    <section class="relative py-24">
+    <section class="relative pt-24">
       <!-- Background effects -->
       <div class="absolute inset-0">
         <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary-600/10 rounded-full blur-3xl"></div>
@@ -93,65 +97,19 @@ function formatTag(tag) {
       </div>
     </section>
 
-    <!-- Dynamic Tag Cluster -->
-    <section id="categories" class="py-20 relative">
+    <!-- Dynamic Tag Cluster with Filtering -->
+    <section id="categories" class="pt-8 pb-20 relative">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl font-bold text-white mb-4">
             Categories
           </h2>
-          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-            Explore our content by topic and area of focus
-          </p>
         </div>
-        <div class="flex flex-wrap justify-center gap-3">
-          {allTags.map((tag, idx) => (
-            <a
-              href={`#tag-${tag.replace(/\s+/g, '-')}`}
-              class={`px-4 py-2 rounded-full text-white font-semibold shadow-md cursor-pointer hover:scale-105 transition-all ${getTagColor(tag, idx)}`}
-              title={`Show posts tagged '${formatTag(tag)}'`}
-              key={tag}
-            >
-              {formatTag(tag)}
-            </a>
-          ))}
-        </div>
+        <BlogTagFilter client:load allTags={allTags} posts={posts} tagColors={tagColors} formatTag={formatTag} />
       </div>
     </section>
 
-    <!-- All Posts -->
-    <section class="py-20 relative">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-          <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
-            All Posts
-          </h2>
-          <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-            Browse our complete collection of articles and insights
-          </p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post, index) => (
-            <div class="animate-fade-in" style={`animation-delay: ${index * 50}ms;`}>
-              <BlogCard
-                title={post.title}
-                description={post.description}
-                date={post.date}
-                slug={post.slug}
-                tags={post.tags}
-                readingTime={post.readingTime}
-                featured={false}
-              />
-            </div>
-          ))}
-        </div>
-        {posts.length === 0 && (
-          <div class="text-center py-12">
-            <p class="text-gray-400 text-lg">No blog posts available at this time.</p>
-          </div>
-        )}
-      </div>
-    </section>
+    <!-- All Posts now rendered by BlogTagFilter above -->
 
 
     <!-- Newsletter Signup -->
@@ -186,5 +144,8 @@ function formatTag(tag) {
         </div>
       </div>
     </section>
+
+    <!-- Support CTA -->
+    <SupportCTA variant="compact" />
   </main>
 </Layout>
