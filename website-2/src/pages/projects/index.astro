@@ -2,6 +2,7 @@
 import Layout from '../../components/Layout.astro';
 import { getCollection } from 'astro:content';
 import ProjectCard from '../../components/ProjectCard.astro';
+import SupportCTA from '../../components/SupportCTA.astro';
 const projects = await getCollection('projects');
 ---
 <Layout title="Projects | TinkerForge AI">
@@ -16,5 +17,8 @@ const projects = await getCollection('projects');
         ))}
       </div>
     </div>
+  </div>
+  <div class="mt-16 flex justify-center">
+    <SupportCTA variant="inline-project" />
   </div>
 </Layout>
