@@ -1,6 +1,5 @@
 ---
 import Layout from '../../components/Layout.astro';
-import { Markdown } from 'astro/components';
 import { getEntryBySlug, getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -11,12 +10,17 @@ export async function getStaticPaths() {
 const { slug } = Astro.params;
 const post = await getEntryBySlug('blog', slug);
 if (!post) throw Astro.redirect('/blog');
+
+const { Content } = await post.render();
 ---
+
 <Layout title={post.data.title} description={post.data.description}>
-  <article class="prose prose-invert mx-auto">
+  <article class="prose prose-invert mx-auto mt-20 pb-16">
+    <time class="text-sm text-zinc-500 mb-4 block">
+      {new Date(post.data.date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}
+    </time>
     <h1>{post.data.title}</h1>
     <p class="text-zinc-400">{post.data.description}</p>
-    <time class="text-sm text-zinc-500">{post.data.date}</time>
-    <div set:html={post.body} />
+    <Content />
   </article>
 </Layout>

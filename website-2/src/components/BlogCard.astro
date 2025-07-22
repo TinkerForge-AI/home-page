@@ -28,17 +28,18 @@ const isoDate = SafeDate.toISOString(date);
 const safeTags = Array.isArray(tags) ? tags : [];
 const displayTags = safeTags.slice(0, 3);
 const remainingTagsCount = Math.max(0, safeTags.length - 3);
+// ...removed duplicate destructuring to avoid redeclaration error...
 ---
 
 <article class={`group relative overflow-hidden rounded-2xl transition-all duration-300 hover:scale-[1.02] ${featured ? 'blog-card-featured' : 'blog-card'}`}>
   <!-- Background gradient -->
-  <div class="absolute inset-0 bg-gradient-to-br from-surface via-surface-light to-surface opacity-80"></div>
+  <div class="absolute inset-0 bg-gradient-to-br from-surface via-surface-light to-surface opacity-80" style="z-index:0; pointer-events:none;"></div>
   
   <!-- Hover gradient overlay -->
-  <div class="absolute inset-0 bg-gradient-to-br from-primary-600/20 via-transparent to-accent-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+  <div class="absolute inset-0 bg-gradient-to-br from-primary-600/20 via-transparent to-accent-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" style="z-index:1; pointer-events:none;"></div>
   
   <!-- Content -->
-  <div class="relative p-6 h-full flex flex-col">
+  <div class="relative p-6 h-full flex flex-col" style="z-index:10; pointer-events:auto;">
     <!-- Header -->
     <div class="flex items-start justify-between mb-4">
       <div class="flex-1">
@@ -111,7 +112,7 @@ const remainingTagsCount = Math.max(0, safeTags.length - 3);
   </div>
   
   <!-- Animated border -->
-  <div class="absolute inset-0 rounded-2xl border border-surface-border group-hover:border-primary-500/50 transition-colors duration-300"></div>
+  <div class="absolute inset-0 rounded-2xl border border-surface-border group-hover:border-primary-500/50 transition-colors duration-300" style="z-index:2; pointer-events:none;"></div>
   
   <!-- Glow effect for featured posts -->
   {featured && (
