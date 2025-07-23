@@ -1,9 +1,9 @@
 ---
 title: "Running Open-Source LLMs Locally: A Work-in-Progress"
 description: "Our first attempt at running an LLM locally using quantized GGUF models and Python APIs"
-date: 2025-07-13
+date: 2025-07-22
 type: "blog"
-author: "TinkerForge AI"
+author: "D. Chisholm"
 tags: ["Getting Started", "LLM", "AI Research", "Code LLM", "Python", "FastAPI"]
 ---
 

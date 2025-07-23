@@ -62,21 +62,28 @@ export default function BlogTagFilter({ allTags, posts, tagColors }) {
         >
           {ALL_TAG}
         </button>
-        {allTags.map((tag, idx) => {
-          const isActive = selected.includes(tag);
-          return (
-            <button
-              key={tag}
-              type="button"
-              onClick={() => toggleTag(tag)}
-              className={`px-4 py-2 rounded-full text-white font-semibold shadow-md cursor-pointer transition-all ${tagColors[idx % tagColors.length]} ${isActive ? '' : 'opacity-50'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
-              aria-pressed={isActive}
-              title={`Show posts tagged '${formatTag(tag)}'`}
-            >
-              {formatTag(tag)}
-            </button>
-          );
-        })}
+        {/* Deduplicate formatted tag names */}
+        {(() => {
+          const formattedTagSet = new Set();
+          return allTags.map((tag, idx) => {
+            const formatted = formatTag(tag);
+            if (formattedTagSet.has(formatted)) return null;
+            formattedTagSet.add(formatted);
+            const isActive = selected.includes(tag);
+            return (
+              <button
+                key={formatted}
+                type="button"
+                onClick={() => toggleTag(tag)}
+                className={`px-4 py-2 rounded-full text-white font-semibold shadow-md cursor-pointer transition-all ${tagColors[idx % tagColors.length]} ${isActive ? '' : 'opacity-50'} focus:outline-none focus:ring-2 focus:ring-offset-2`}
+                aria-pressed={isActive}
+                title={`Show posts tagged '${formatted}'`}
+              >
+                {formatted}
+              </button>
+            );
+          });
+        })()}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {filteredPosts.map((post, index) => (
