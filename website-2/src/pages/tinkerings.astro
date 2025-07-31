@@ -1,0 +1,221 @@
+---
+import Layout from '../components/Layout.astro';
+import TinkeringCard from '../components/TinkeringCard.astro';
+import SupportCTA from '../components/SupportCTA.astro';
+import { getCollection } from 'astro:content';
+
+// Get all tinkerings and sort by date
+const allTinkerings = (await getCollection('tinkerings'))
+  .map(tinkering => {
+    let date = tinkering.data.date;
+    if (date && !(date instanceof Date)) {
+      date = new Date(date + 'T00:00:00');
+    }
+    return {
+      ...tinkering,
+      data: {
+        ...tinkering.data,
+        date
+      }
+    };
+  })
+  .filter(tinkering => {
+    return (
+      tinkering.data.title &&
+      tinkering.data.description &&
+      tinkering.data.date instanceof Date &&
+      !isNaN(tinkering.data.date.getTime())
+    );
+  })
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+// Separate AI-assisted and traditional projects
+const aiAssistedTinkerings = allTinkerings.filter(t => t.data.builtWithAssistants === true);
+const traditionalTinkerings = allTinkerings.filter(t => t.data.builtWithAssistants !== true);
+
+// Gather all unique tags
+const tagSet = new Set();
+allTinkerings.forEach(tinkering => (tinkering.data.tags || []).forEach(tag => tagSet.add(tag)));
+const allTags = Array.from(tagSet);
+---
+
+<Layout 
+  title="Tinkerings - TinkerForge AI"
+  description="Playful AI projects and experiments showcasing the power of coding assistants and innovative development approaches."
+>
+  <main class="min-h-screen bg-gradient-to-br from-surface-dark via-surface to-surface-dark">
+    <!-- Hero Section -->
+    <section class="relative pt-24 pb-12">
+      <!-- Background effects with playful colors -->
+      <div class="absolute inset-0">
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-600/5 rounded-full blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+          <!-- Playful tinkering icon in title -->
+          <div class="flex items-center justify-center mb-6">
+            <div class="relative">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 text-purple-400 animate-bounce">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+              </svg>
+              <div class="absolute inset-0 bg-gradient-to-br from-purple-500 to-blue-500 rounded-full blur opacity-30 animate-pulse"></div>
+            </div>
+          </div>
+          
+          <h1 class="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-400 via-pink-300 to-blue-400 bg-clip-text text-transparent leading-[1.15] pb-2">
+            Tinkerings
+          </h1>
+          <p class="text-xl md:text-2xl text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+            Playful AI projects and experiments showcasing the power of coding assistants 
+            and innovative development approaches. A nod to TinkerForge's spirit of exploration.
+          </p>
+          
+          <!-- Fun stats -->
+          <div class="flex flex-wrap justify-center gap-8 text-sm text-gray-400 mb-8">
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></span>
+              <span>{aiAssistedTinkerings.length} AI-Assisted Projects</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+              <span>{traditionalTinkerings.length} Traditional Projects</span>
+            </div>
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 bg-pink-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></span>
+              <span>{allTags.length} Technologies</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tinkerings Grid -->
+    <section class="pb-20 relative">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* AI-Assisted Projects Section */}
+        {aiAssistedTinkerings.length > 0 && (
+          <div class="mb-16">
+            <div class="flex items-center mb-8">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-purple-400 mr-3 animate-pulse">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+              </svg>
+              <h2 class="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                AI-Assisted Creations
+              </h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+              {aiAssistedTinkerings.map(tinkering => (
+                <TinkeringCard tinkering={tinkering} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Traditional Projects Section */}
+        {traditionalTinkerings.length > 0 && (
+          <div>
+            <div class="flex items-center mb-8">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-blue-400 mr-3">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+              </svg>
+              <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                Traditional Craftsmanship
+              </h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+              {traditionalTinkerings.map(tinkering => (
+                <TinkeringCard tinkering={tinkering} />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* All projects combined fallback */}
+        {aiAssistedTinkerings.length === 0 && traditionalTinkerings.length === 0 && allTinkerings.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-fr">
+            {allTinkerings.map(tinkering => (
+              <TinkeringCard tinkering={tinkering} />
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 relative">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="p-12 bg-gradient-to-br from-surface via-surface-light to-surface border border-surface-border rounded-3xl backdrop-blur-sm relative overflow-hidden">
+          <div class="absolute inset-0 bg-gradient-to-br from-purple-600/10 via-transparent to-blue-600/10"></div>
+          
+          <div class="relative z-10">
+            <div class="flex items-center justify-center mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 text-purple-400 animate-bounce">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z" />
+              </svg>
+            </div>
+            <h2 class="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-6">
+              Ready to Tinker?
+            </h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+              Explore our open-source tinkerings, contribute to existing projects, 
+              or get inspired to start your own AI-assisted development journey.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a 
+                href="https://github.com/tinkerforge-ai" 
+                target="_blank"
+                rel="noopener"
+                class="px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 glow-border"
+              >
+                Browse GitHub
+              </a>
+              <a 
+                href="/blog" 
+                class="px-8 py-4 bg-surface-light hover:bg-surface border border-surface-border text-white font-semibold rounded-xl transition-all duration-200 transform hover:scale-105 backdrop-blur-sm"
+              >
+                Read Our Blog
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support CTA -->
+    <SupportCTA variant="compact" />
+  </main>
+</Layout>
+
+<style>
+  .glow-border {
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.3);
+  }
+  
+  .glow-border:hover {
+    box-shadow: 0 0 30px rgba(147, 51, 234, 0.5);
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  @keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .animate-bounce {
+    animation: bounce 2s infinite;
+  }
+</style>

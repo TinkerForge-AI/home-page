@@ -203,6 +203,14 @@ declare module 'astro:content' {
   rendered?: RenderedContent;
   filePath?: string;
 }>;
+"tinkerings": Record<string, {
+  id: string;
+  body?: string;
+  collection: "tinkerings";
+  data: any;
+  rendered?: RenderedContent;
+  filePath?: string;
+}>;
 
 	};
 

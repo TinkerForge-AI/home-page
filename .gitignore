@@ -1,0 +1,76 @@
+# Node
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+.out/
+.astro/
+
+# Astro cache
+.cache/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+
+# Test output/coverage
+coverage/
+playwright-report/
+test-results/
+
+# VSCode
+.vscode/
+
+# Misc
+*.local
+*.sublime-workspace
+*.sublime-project
+
+# Ignore generated images/assets
+website/public/images/
+
+# Ignore Astro/React/Next.js/Playwright typical files
+website/.next/
+website/.astro/
+website/.cache/
+website/node_modules/
+website-2/node_modules/
+website-2/.next/
+website-2/.astro/
+website-2/.cache/
+website-2/dist/
+website-2/build/
+website-2/playwright-report/
+website-2/test-results/
+
+# Ignore lock files if not using them for reproducibility
+# package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Ignore local scripts output
+scripts/*.log
+
+# Ignore server build output
+website/server/dist/
+website/server/.cache/
+
+# Ignore temp files
+*.tmp
+*.swp
+*.bak
+
+# Ignore Markdown preview artifacts
+*.md.html

@@ -4,5 +4,6 @@ description: "Our first open-source alignment benchmark with methodology and res
 date: 2025-01-10
 type: "blog"
 author: "TinkerForge AI"
+tags: ["Experiments", "Alignment", "Benchmark", "AI Research"]
 ---
 This is a research post describing our first open-source alignment benchmark. We share methodology, results, and lessons learned for the community.

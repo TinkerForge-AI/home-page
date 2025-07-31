@@ -1,0 +1,64 @@
+---
+const { tinkering } = Astro.props;
+---
+<article class="flex flex-col justify-between p-6 rounded-2xl bg-zinc-900 shadow-lg hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.03] transition-all border border-zinc-800 group relative overflow-hidden">
+  <!-- Background gradient effect -->
+  <div class="absolute inset-0 bg-gradient-to-br from-purple-600/5 via-transparent to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+  
+  <div class="relative z-10">
+    <div class="flex items-center justify-between mb-3">
+      <!-- Playful tinkering icon -->
+      <div class="flex items-center space-x-2">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+          </svg>
+        </div>
+        
+        <!-- AI Assistant Badge -->
+        {tinkering.data.builtWithAssistants && (
+          <span class="inline-flex items-center px-2 py-1 text-xs font-semibold rounded-full bg-gradient-to-r from-purple-600/20 to-blue-600/20 text-purple-300 border border-purple-500/30 animate-pulse">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3 mr-1">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423L16.5 15.75l.394 1.183a2.25 2.25 0 001.423 1.423L19.5 18.75l-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+            </svg>
+            AI-Assisted
+          </span>
+        )}
+      </div>
+    </div>
+    
+    <a href={tinkering.data.github} class="block" target="_blank" rel="noopener">
+      <h2 class="text-2xl font-bold mb-2 group-hover:text-purple-400 transition-colors">{tinkering.data.title}</h2>
+      <p class="text-zinc-400 mb-4 line-clamp-3">{tinkering.data.description}</p>
+    </a>
+    
+    {tinkering.data.tags && tinkering.data.tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tinkering.data.tags.map(tag => (
+          <span class="px-2 py-0.5 text-xs rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 hover:border-purple-500/30 transition-colors">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+  
+  <div class="flex items-end justify-between mt-4 relative z-10">
+    <div class="flex items-center space-x-3">
+      {tinkering.data.github && (
+        <a href={tinkering.data.github} class="inline-flex items-center text-zinc-400 hover:text-white transition-colors group/link" target="_blank" rel="noopener" title="GitHub Repository">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 group-hover/link:scale-110 transition-transform">
+            <path d="M12 2C6.477 2 2 6.484 2 12.021c0 4.428 2.865 8.184 6.839 9.504.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.342-3.369-1.342-.454-1.154-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.004.07 1.532 1.032 1.532 1.032.892 1.53 2.341 1.088 2.91.832.091-.647.35-1.088.636-1.339-2.221-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.025A9.564 9.564 0 0 1 12 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.748-1.025 2.748-1.025.546 1.378.202 2.397.1 2.65.64.7 1.028 1.595 1.028 2.688 0 3.847-2.337 4.695-4.566 4.944.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.749 0 .267.18.578.688.48C19.138 20.2 22 16.447 22 12.021 22 6.484 17.523 2 12 2Z" />
+          </svg>
+          <span class="ml-2 text-sm">View Code</span>
+        </a>
+      )}
+      {tinkering.data.demo && (
+        <a href={tinkering.data.demo} class="inline-flex items-center text-zinc-400 hover:text-white transition-colors group/link" target="_blank" rel="noopener" title="Live Demo">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 group-hover/link:scale-110 transition-transform">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+          </svg>
+          <span class="ml-2 text-sm">Demo</span>
+        </a>
+      )}
+    </div>
+  </div>
+</article>
